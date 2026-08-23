@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christ Emmanuel Safré — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080B12;
+    --bg-raised:#0F141F;
+    --bg-raised-2:#141B29;
+    --line:#212B3D;
+    --line-soft:#1A2233;
+    --text:#E7ECF6;
+    --text-soft:#8D97AE;
+    --text-faint:#5B6479;
+
+    --cyan:#3FD8FF;
+    --violet:#B478FF;
+    --magenta:#FF5FA8;
+    --green:#3FE0A5;
+
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+
+    --max-w: 960px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  ::selection{ background: var(--violet); color: #0A0E17; }
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  .reveal{
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .reveal.is-visible{ opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1 !important; transform:none !important; transition:none !important; }
+    *{ animation-duration: .001s !important; animation-iteration-count: 1 !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,11,18,0.72);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height: 66px;
+  }
+  .monogram{
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    display:flex;
+    align-items:center;
+    gap: 8px;
+  }
+  .monogram .cursor-dot{
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan), 0 0 16px var(--cyan);
+    animation: blink 1.4s step-end infinite;
+  }
+  @keyframes blink{ 0%,45%{opacity:1;} 50%,95%{opacity:.15;} 100%{opacity:1;} }
+
+  nav ul{ list-style:none; display:flex; gap: 30px; }
+  nav ul a{
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text-soft);
+    position: relative;
+    padding-bottom: 4px;
+  }
+  nav ul a::after{
+    content:"";
+    position:absolute; left:0; bottom:0;
+    width:0; height: 1px;
+    background: var(--cyan);
+    transition: width .2s ease;
+  }
+  nav ul a:hover{ color: var(--text); }
+  nav ul a:hover::after{ width:100%; }
+
+  @media (max-width: 620px){
+    nav ul{ gap: 16px; }
+    nav ul a{ font-size: 0.74rem; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position: relative;
+    padding: 110px 0 90px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  #neuralCanvas{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .hero-glow{
+    position:absolute;
+    top: -180px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse at center, rgba(63,216,255,0.18) 0%, rgba(180,120,255,0.10) 40%, transparent 72%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-inner{ position: relative; z-index: 2; }
+
+  .terminal{
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--green);
+    background: rgba(15,20,31,0.7);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    max-width: 560px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(4px);
+  }
+  .terminal .line{ display:flex; gap: 10px; margin-bottom: 6px; }
+  .terminal .line:last-child{ margin-bottom:0; }
+  .terminal .prompt{ color: var(--text-faint); flex-shrink:0; }
+  .terminal .out{ color: var(--cyan); }
+  .terminal .typed::after{
+    content:"▌";
+    margin-left: 2px;
+    color: var(--cyan);
+    animation: blink 1s step-end infinite;
+  }
+  .terminal .typed.done::after{ content:""; }
+
+  h1.statement{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(2rem, 5.4vw, 3.4rem);
+    line-height: 1.14;
+    max-width: 16ch;
+    color: var(--text);
+  }
+  h1.statement .grad{
+    background: linear-gradient(90deg, var(--cyan), var(--violet) 60%, var(--magenta));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-sub{
+    margin-top: 24px;
+    max-width: 56ch;
+    color: var(--text-soft);
+    font-size: 1.05rem;
+  }
+  .hero-actions{
+    margin-top: 36px;
+    display:flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 0.86rem;
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    cursor:pointer;
+    transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .btn.primary{
+    background: var(--cyan);
+    color: #071018;
+    border-color: var(--cyan);
+    font-weight: 600;
+  }
+  .btn.primary:hover{
+    box-shadow: 0 0 0 1px var(--cyan), 0 0 24px rgba(63,216,255,0.55);
+    transform: translateY(-2px);
+  }
+  .btn.ghost{
+    background: transparent;
+    color: var(--text);
+  }
+  .btn.ghost:hover{
+    border-color: var(--violet);
+    box-shadow: 0 0 16px rgba(180,120,255,0.3);
+    transform: translateY(-2px);
+  }
+
+  .stat-strip{
+    margin-top: 54px;
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .stat-strip div{
+    padding: 18px 20px 18px 0;
+    border-left: 1px solid var(--line-soft);
+    padding-left: 20px;
+  }
+  .stat-strip div:first-child{ border-left:none; padding-left:0; }
+  .stat-num{
+    font-family: var(--display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--cyan);
+    display:block;
+  }
+  .stat-label{
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-soft);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    display:block;
+    margin-top: 4px;
+  }
+  @media (max-width: 620px){
+    .stat-strip{ grid-template-columns: repeat(2,1fr); }
+    .stat-strip div:nth-child(3){ border-left:none; padding-left:0; }
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding: 76px 0; position:relative; }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap: 14px;
+    margin-bottom: 44px;
+    border-bottom: 1px solid var(--line-soft);
+    padding-bottom: 16px;
+  }
+  .section-tag{
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--magenta);
+    white-space:nowrap;
+  }
+  .section-head h2{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.6rem;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 108px 1fr;
+    gap: 34px;
+    align-items:start;
+  }
+  .avatar{
+    width: 108px; height: 108px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--cyan), var(--violet));
+    color:#081019;
+    font-family: var(--display);
+    font-weight:700;
+    font-size: 2rem;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    box-shadow: 0 0 30px rgba(63,216,255,0.25);
+  }
+  .about-text p{ color: var(--text-soft); margin-bottom: 14px; max-width: 62ch; }
+  .about-text strong{ color: var(--text); font-weight: 600; }
+  .badges{ margin-top: 22px; display:flex; gap: 10px; flex-wrap: wrap; }
+  .badge{
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: var(--text-soft);
+    background: var(--bg-raised);
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .badge:hover{ border-color: var(--cyan); color: var(--text); }
+  @media (max-width: 560px){
+    .about-grid{ grid-template-columns: 1fr; }
+    .avatar{ width:72px; height:72px; font-size:1.5rem; }
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skill-groups{ display:grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  @media (max-width: 700px){ .skill-groups{ grid-template-columns: 1fr; gap: 28px; } }
+  .skill-group-title{
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text-faint);
+    margin-bottom: 18px;
+  }
+  .skill-bar{ margin-bottom: 20px; }
+  .skill-bar:last-child{ margin-bottom: 0; }
+  .skill-bar-top{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 8px; }
+  .skill-bar-top .name{ font-weight: 600; font-size: 0.94rem; }
+  .skill-bar-top .level-label{ font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); }
+  .skill-bar-track{
+    height: 6px;
+    background: var(--line-soft);
+    border-radius: 3px;
+    overflow:hidden;
+  }
+  .skill-bar-fill{
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    box-shadow: 0 0 10px rgba(63,216,255,0.5);
+    transition: width 1.1s cubic-bezier(.2,.8,.2,1);
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .project{
+    position: relative;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    border-radius: 10px;
+    padding: 28px 28px 24px;
+    margin-bottom: 22px;
+    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+  }
+  .project:hover{
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 1px rgba(63,216,255,0.25), 0 12px 30px rgba(63,216,255,0.08);
+    transform: translateY(-3px);
+  }
+  .project-top{
+    display:flex; justify-content:space-between; align-items:flex-start; gap: 16px; flex-wrap: wrap;
+  }
+  .project-name{ font-family: var(--display); font-weight: 600; font-size: 1.3rem; }
+  .project-name a{ border-bottom: 1px solid var(--line); }
+  .project-name a:hover{ border-color: var(--cyan); color: var(--cyan); }
+  .stamp{
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space:nowrap;
+    display:flex; align-items:center; gap:6px;
+  }
+  .stamp .pulse{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+  .project-desc{ margin-top: 12px; color: var(--text-soft); max-width: 62ch; }
+  .project-highlights{ margin-top: 16px; list-style:none; }
+  .project-highlights li{
+    position: relative;
+    padding-left: 22px;
+    color: var(--text-soft);
+    font-size: 0.94rem;
+    margin-bottom: 8px;
+  }
+  .project-highlights li::before{
+    content:"→";
+    position:absolute; left:0;
+    color: var(--violet);
+    font-family: var(--mono);
+  }
+  .project-meta{
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--text-faint);
+  }
+  .project-meta strong{ color: var(--text-soft); font-weight: 500; }
+  .project-tags{ margin-top: 14px; display:flex; gap: 8px; flex-wrap:wrap; }
+  .tag{
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--cyan);
+    background: rgba(63,216,255,0.08);
+    border: 1px solid rgba(63,216,255,0.25);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* ---------- ROADMAP ---------- */
+  .roadmap{ border-left: 1px solid var(--line); margin-left: 6px; }
+  .step{ position: relative; padding: 0 0 40px 32px; }
+  .step:last-child{ padding-bottom: 4px; }
+  .step::before{
+    content:"";
+    position:absolute; left: -6px; top: 3px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--violet);
+  }
+  .step.current::before{
+    background: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 4px rgba(63,216,255,0.18), 0 0 14px rgba(63,216,255,0.6);
+    animation: pulse-ring 2s ease-out infinite;
+  }
+  @keyframes pulse-ring{
+    0%{ box-shadow: 0 0 0 0 rgba(63,216,255,0.45), 0 0 14px rgba(63,216,255,0.6); }
+    70%{ box-shadow: 0 0 0 8px rgba(63,216,255,0), 0 0 14px rgba(63,216,255,0.6); }
+    100%{ box-shadow: 0 0 0 0 rgba(63,216,255,0), 0 0 14px rgba(63,216,255,0.6); }
+  }
+  .step .when{
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .step h3{ font-family: var(--display); font-weight: 600; font-size: 1.15rem; margin-top: 6px; }
+  .step p{ margin-top: 6px; color: var(--text-soft); max-width: 58ch; }
+
+  /* ---------- CONTACT ---------- */
+  .contact-box{
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 44px;
+    background: linear-gradient(160deg, var(--bg-raised), var(--bg-raised-2));
+    display:flex; justify-content:space-between; align-items:flex-start; gap: 28px; flex-wrap: wrap;
+    position: relative;
+    overflow:hidden;
+  }
+  .contact-links{ flex-shrink: 0; padding-top: 4px; }
+  .contact-box::before{
+    content:"";
+    position:absolute; top:-40%; right:-10%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(180,120,255,0.16), transparent 70%);
+    pointer-events:none;
+  }
+  .contact-box h2{
+    font-family: var(--display);
+    font-weight:600;
+    font-size: 1.5rem;
+    max-width: 22ch;
+    position: relative;
+  }
+  .contact-links{ display:flex; gap: 12px; flex-wrap:wrap; position:relative; }
+
+  .email-row{
+    margin-top: 18px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .email-row .email-text{
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    color: var(--cyan);
+  }
+  .copy-btn{
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-soft);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .copy-btn:hover{ border-color: var(--cyan); color: var(--text); }
+  .copy-btn.copied{ border-color: var(--green); color: var(--green); }
+
+  footer{ border-top: 1px solid var(--line-soft); padding: 30px 0 44px; text-align:center; }
+  footer p{ font-family: var(--mono); font-size: 0.74rem; color: var(--text-faint); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="monogram"><span class="cursor-dot"></span>SCE</div>
+    <ul>
+      <li><a href="#projets">projets</a></li>
+      <li><a href="#parcours">parcours</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <canvas id="neuralCanvas"></canvas>
+  <div class="hero-glow"></div>
+  <div class="wrap hero-inner">
+
+    <div class="terminal" aria-hidden="false">
+      <div class="line"><span class="prompt">$</span><span class="out typed" data-text="whoami"></span></div>
+      <div class="line"><span class="prompt">&gt;</span><span class="out typed" data-text="Christ Emmanuel Safré — futur ingénieur IA"></span></div>
+      <div class="line"><span class="prompt">$</span><span class="out typed" data-text="status --current"></span></div>
+      <div class="line"><span class="prompt">&gt;</span><span class="out typed" data-text="Terminale · Spécialités Mathématiques &amp; NSI"></span></div>
+    </div>
+
+    <h1 class="statement">Je construis les fondations d'un <span class="grad">ingénieur en IA</span>.</h1>
+    <p class="hero-sub">
+      Élève de terminale, je code déjà ce que j'apprends en cours : visualisation de fonctions, simulations probabilistes, analyse de données. L'objectif — une école d'ingénieur, puis une spécialisation en intelligence artificielle.
+    </p>
+    <div class="hero-actions">
+      <a class="btn primary" href="https://github.com/ChristSCE-GIT" target="_blank" rel="noopener">Voir le code sur GitHub</a>
+      <a class="btn ghost" href="#contact">Me contacter</a>
+    </div>
+
+    <div class="stat-strip">
+      <div><span class="stat-num">3</span><span class="stat-label">Projets Python publiés</span></div>
+      <div><span class="stat-num">2</span><span class="stat-label">Spécialités — Maths &amp; NSI</span></div>
+      <div><span class="stat-num">Term.</span><span class="stat-label">Niveau — classe de terminale</span></div>
+      <div><span class="stat-num">IA</span><span class="stat-label">Objectif — ingénieur IA</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="a-propos">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="section-tag">// 01</span><h2>À propos</h2></div>
+    <div class="about-grid reveal">
+      <div class="avatar">CE</div>
+      <div class="about-text">
+        <p><strong>SAFRÉ Christ Emmanuel</strong> — actuellement en classe de terminale, spécialités <strong>Mathématiques</strong> et <strong>Numérique et Sciences Informatiques (NSI)</strong>.</p>
+        <p>Je m'intéresse à l'intelligence artificielle par la pratique : plutôt que d'attendre les cours de prépa ou d'école d'ingénieur, j'expérimente déjà avec Python sur des sujets qui recoupent mes cours de maths — fonctions, probabilités, statistiques appliquées.</p>
+        <p>Mon objectif après le bac : intégrer une formation d'ingénieur exigeante, puis me spécialiser en IA / machine learning.</p>
+        <div class="badges">
+          <span class="badge">Python</span>
+          <span class="badge">Algorithmique</span>
+          <span class="badge">Probabilités &amp; Statistiques</span>
+          <span class="badge">Analyse de données</span>
+          <span class="badge">Git / GitHub</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projets">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="section-tag">// 02</span><h2>Projets</h2></div>
+
+    <div class="project reveal">
+      <div class="project-top">
+        <span class="project-name"><a href="https://github.com/ChristSCE-GIT/MathVisualizer" target="_blank" rel="noopener">MathVisualizer</a></span>
+        <span class="stamp"><span class="pulse"></span>en cours</span>
+      </div>
+      <p class="project-desc">Outil Python pour visualiser des fonctions mathématiques — un moyen de rendre concret ce qui est étudié en cours d'analyse, et de vérifier mes intuitions à l'écran plutôt que sur le papier.</p>
+      <ul class="project-highlights">
+        <li>Trace automatiquement une fonction saisie et calcule ses points caractéristiques</li>
+        <li>Applique directement des notions du programme de spécialité maths (dérivation, limites)</li>
+      </ul>
+      <div class="project-meta"><strong>Stack :</strong>&nbsp;Python, Matplotlib</div>
+      <div class="project-tags">
+        <span class="tag">python</span>
+        <span class="tag">mathématiques</span>
+        <span class="tag">visualisation</span>
+      </div>
+    </div>
+
+    <div class="project reveal">
+      <div class="project-top">
+        <span class="project-name"><a href="https://github.com/ChristSCE-GIT/ProbabilityLab" target="_blank" rel="noopener">ProbabilityLab</a></span>
+        <span class="stamp"><span class="pulse"></span>en cours</span>
+      </div>
+      <p class="project-desc">Simulation de la loi des grands nombres en Python. Un projet pour observer expérimentalement un théorème du programme de spécialité maths, plutôt que de le laisser abstrait.</p>
+      <ul class="project-highlights">
+        <li>Génère des tirages aléatoires répétés et mesure la convergence vers la moyenne théorique</li>
+        <li>Traduit un résultat théorique en expérience visuelle et vérifiable</li>
+      </ul>
+      <div class="project-meta"><strong>Stack :</strong>&nbsp;Python, Matplotlib, random</div>
+      <div class="project-tags">
+        <span class="tag">python</span>
+        <span class="tag">probabilités</span>
+        <span class="tag">simulation</span>
+      </div>
+    </div>
+
+    <div class="project reveal">
+      <div class="project-top">
+        <span class="project-name"><a href="https://github.com/ChristSCE-GIT/Football_DataAnalyzer" target="_blank" rel="noopener">Football_DataAnalyzer</a></span>
+        <span class="stamp"><span class="pulse"></span>en cours</span>
+      </div>
+      <p class="project-desc">Programme d'analyse statistique de matchs de football à partir d'un fichier CSV. Premier projet de traitement de données de bout en bout : lecture, nettoyage, calcul de statistiques.</p>
+      <ul class="project-highlights">
+        <li>Lit et nettoie un jeu de données réel avant tout calcul</li>
+        <li>Calcule des indicateurs statistiques (moyennes, totaux, classements) à partir des données brutes</li>
+      </ul>
+      <div class="project-meta"><strong>Stack :</strong>&nbsp;Python, traitement de fichiers CSV</div>
+      <div class="project-tags">
+        <span class="tag">python</span>
+        <span class="tag">données CSV</span>
+        <span class="tag">statistiques</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="competences">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="section-tag">// 03</span><h2>Compétences</h2></div>
+
+    <div class="skill-groups reveal">
+      <div>
+        <p class="skill-group-title">Technique</p>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Python</span><span class="level-label">Confirmé pour mon niveau</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="75"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Analyse de données (CSV, statistiques)</span><span class="level-label">Opérationnel</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="65"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Probabilités appliquées</span><span class="level-label">Opérationnel</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="65"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Algorithmique (NSI)</span><span class="level-label">Opérationnel</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="60"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Git &amp; GitHub</span><span class="level-label">Notions solides</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="50"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <p class="skill-group-title">En construction</p>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Machine learning (scikit-learn)</span><span class="level-label">Débutant</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="25"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Algèbre linéaire</span><span class="level-label">Débutant</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="30"></div></div>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-bar-top"><span class="name">Anglais technique</span><span class="level-label">Intermédiaire</span></div>
+          <div class="skill-bar-track"><div class="skill-bar-fill" data-level="55"></div></div>
+        </div>
+        <p style="margin-top:22px; color:var(--text-soft); font-size:0.9rem; max-width:42ch;">
+          Ces compétences progressent chaque mois — le GitHub ci-dessus fait foi de l'avancement réel.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="parcours">
+  <div class="wrap">
+    <div class="section-head reveal"><span class="section-tag">// 04</span><h2>Parcours envisagé</h2></div>
+    <div class="roadmap reveal">
+      <div class="step current">
+        <div class="when">2025 — 2026</div>
+        <h3>Terminale, spé Maths &amp; NSI</h3>
+        <p>Préparation du bac, premiers projets Python personnels, découverte des bases de l'algorithmique et des probabilités appliquées.</p>
+      </div>
+      <div class="step">
+        <div class="when">Après le bac</div>
+        <h3>Classe préparatoire ou école d'ingénieur post-bac</h3>
+        <p>Renforcement des bases en mathématiques (algèbre linéaire, analyse) et en informatique, en vue d'intégrer une école d'ingénieur.</p>
+      </div>
+      <div class="step">
+        <div class="when">École d'ingénieur</div>
+        <h3>Spécialisation en intelligence artificielle</h3>
+        <p>Approfondissement du machine learning, du deep learning et de la donnée à grande échelle, à travers des projets et des stages.</p>
+      </div>
+      <div class="step">
+        <div class="when">Objectif</div>
+        <h3>Ingénieur en IA</h3>
+        <p>Concevoir et déployer des systèmes intelligents, en gardant la rigueur mathématique comme fil conducteur.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box reveal">
+      <div>
+        <h2>Une question, une opportunité ? Écrivez-moi.</h2>
+        <div class="email-row">
+          <span class="email-text" id="emailText">christemmanuelzte330@gmail.com</span>
+          <button class="copy-btn" id="copyEmailBtn" type="button">copier</button>
+        </div>
+      </div>
+      <div class="contact-links">
+        <a class="btn primary" href="mailto:christemmanuelzte330@gmail.com?subject=Contact%20depuis%20votre%20portfolio&body=Bonjour%20Christ%20Emmanuel%2C%0A%0A" target="_blank" rel="noopener">Envoyer un message</a>
+        <a class="btn ghost" href="https://github.com/ChristSCE-GIT" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Christ Emmanuel Safré — Terminale Maths / NSI — construit avec Python en tête.</p>
+</footer>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Terminal typing effect ---- */
+  var typedEls = document.querySelectorAll('.typed');
+  function typeSequential(i){
+    if(i >= typedEls.length) return;
+    var el = typedEls[i];
+    var text = el.getAttribute('data-text');
+    if(reduceMotion){
+      el.textContent = text;
+      el.classList.add('done');
+      typeSequential(i+1);
+      return;
+    }
+    var idx = 0;
+    var speed = 22;
+    function step(){
+      el.textContent = text.slice(0, idx);
+      idx++;
+      if(idx <= text.length){
+        setTimeout(step, speed);
+      } else {
+        el.classList.add('done');
+        setTimeout(function(){ typeSequential(i+1); }, 180);
+      }
+    }
+    step();
+  }
+  typeSequential(0);
+
+  /* ---- Scroll reveal ---- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.15, rootMargin: '0px 0px -40px 0px'});
+    revealEls.forEach(function(el){ obs.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  /* ---- Skill bar fill on view ---- */
+  var bars = document.querySelectorAll('.skill-bar-fill');
+  if('IntersectionObserver' in window){
+    var barObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var lvl = entry.target.getAttribute('data-level');
+          entry.target.style.width = lvl + '%';
+          barObs.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.4});
+    bars.forEach(function(b){ barObs.observe(b); });
+  } else {
+    bars.forEach(function(b){ b.style.width = b.getAttribute('data-level') + '%'; });
+  }
+
+  /* ---- Neural network canvas ---- */
+  var canvas = document.getElementById('neuralCanvas');
+  var ctx = canvas.getContext('2d');
+  var hero = canvas.closest('.hero');
+  var W, H, nodes = [];
+  var NODE_COUNT = 46;
+  var LINK_DIST = 140;
+
+  function resize(){
+    W = canvas.width = hero.offsetWidth * devicePixelRatio;
+    H = canvas.height = hero.offsetHeight * devicePixelRatio;
+    canvas.style.width = hero.offsetWidth + 'px';
+    canvas.style.height = hero.offsetHeight + 'px';
+  }
+
+  function initNodes(){
+    nodes = [];
+    for(var i=0; i<NODE_COUNT; i++){
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random()-0.5) * 0.25 * devicePixelRatio,
+        vy: (Math.random()-0.5) * 0.25 * devicePixelRatio,
+        r: (Math.random()*1.6 + 1) * devicePixelRatio
+      });
+    }
+  }
+
+  var colorCyan = '63,216,255';
+  var colorViolet = '180,120,255';
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    for(var i=0;i<nodes.length;i++){
+      var n = nodes[i];
+      n.x += n.vx; n.y += n.vy;
+      if(n.x < 0 || n.x > W) n.vx *= -1;
+      if(n.y < 0 || n.y > H) n.vy *= -1;
+    }
+
+    for(var i=0;i<nodes.length;i++){
+      for(var j=i+1;j<nodes.length;j++){
+        var a = nodes[i], b = nodes[j];
+        var dx = a.x-b.x, dy = a.y-b.y;
+        var dist = Math.sqrt(dx*dx+dy*dy);
+        var maxDist = LINK_DIST * devicePixelRatio;
+        if(dist < maxDist){
+          var alpha = (1 - dist/maxDist) * 0.35;
+          ctx.strokeStyle = 'rgba(' + colorCyan + ',' + alpha + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    for(var i=0;i<nodes.length;i++){
+      var n = nodes[i];
+      var grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r*4);
+      var col = i % 3 === 0 ? colorViolet : colorCyan;
+      grad.addColorStop(0, 'rgba(' + col + ',0.9)');
+      grad.addColorStop(1, 'rgba(' + col + ',0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r*4, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(' + col + ',1)';
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  var rafId;
+  function loop(){
+    draw();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function start(){
+    resize();
+    initNodes();
+    if(reduceMotion){
+      draw();
+    } else {
+      loop();
+    }
+  }
+
+  window.addEventListener('resize', function(){
+    cancelAnimationFrame(rafId);
+    resize();
+    initNodes();
+    if(reduceMotion){ draw(); } else { loop(); }
+  });
+
+  start();
+
+  /* ---- Copy email to clipboard ---- */
+  var copyBtn = document.getElementById('copyEmailBtn');
+  var emailText = document.getElementById('emailText');
+  if(copyBtn){
+    copyBtn.addEventListener('click', function(){
+      var text = emailText.textContent.trim();
+      function fallbackCopy(){
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta);
+      }
+      function markCopied(){
+        copyBtn.textContent = 'copié ✓';
+        copyBtn.classList.add('copied');
+        setTimeout(function(){
+          copyBtn.textContent = 'copier';
+          copyBtn.classList.remove('copied');
+        }, 1800);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(markCopied, function(){ fallbackCopy(); markCopied(); });
+      } else {
+        fallbackCopy(); markCopied();
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
