@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
-  Github,
+  GitBranch,
   Mail,
   ArrowRight,
   ArrowUpRight,
@@ -834,7 +834,7 @@ export default function Portfolio() {
                 Voir mes projets <ArrowRight size={16} />
               </button>
               <a className="btn btn-ghost" href="https://github.com/ChristSCE-GIT" target="_blank" rel="noreferrer">
-                <Github size={16} /> GitHub
+                <GitBranch size={24} /> Github
               </a>
             </div>
             <div className="hero-stats">
@@ -864,7 +864,7 @@ export default function Portfolio() {
             <ul className="about-facts">
               <li><GraduationCap size={16} /> Terminale générale — Spé Mathématiques &amp; NSI</li>
               <li><Cpu size={16} /> Autodidacte en Python, data &amp; IA</li>
-              <li><Github size={16} /> github.com/ChristSCE-GIT</li>
+              <li><GitBranch size={16} /> github.com/ChristSCE-GIT</li>
             </ul>
           </div>
           <div data-reveal>
@@ -1022,7 +1022,7 @@ export default function Portfolio() {
               </div>
               <div className="contact-row">
                 <div className="contact-row-left">
-                  <Github size={16} /> github.com/ChristSCE-GIT
+                  <GitBranch size={24} /> github.com/ChristSCE-GIT
                 </div>
                 <a className="copy-btn" href="https://github.com/ChristSCE-GIT" target="_blank" rel="noreferrer">
                   <ExternalLink size={14} /> Ouvrir
